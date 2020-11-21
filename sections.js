@@ -9,7 +9,7 @@ const categories = ['Engineering', 'Business', 'Physical Sciences', 'Law & Publi
 'Industrial Arts & Consumer Services','Arts', 'Health','Social Science', 'Biology & Life Science','Education','Humanities & Liberal Arts',
 'Psychology & Social Work','Communications & Journalism','Interdisciplinary']
 
-const gender_categoriesXY = {'Female': [0, 500, 2537348.61, 48.3], 'Male': [500, 500, 3071240.51, 74.9]}
+const gender_categoriesXY = {'Female': [0, 500, 'Majority Female Cast', 2537348.61], 'Male': [500, 500, 'Majority Male Cast', 3071240.51]}
 const genre_categoriesXY = {'ACTION': [0, 400, 'ACTION', 23.9],
                                 'ACTION_COMEDY': [0, 600, 'ACTION COMEDY', 48.3],
                                 'ADVENTURE': [0, 800, 'ADVENTURE', 50.9],
@@ -545,15 +545,15 @@ function draw2(){
         .attr('y', d => genre_categoriesXY[d][1] + 50)
         .attr('opacity', 1)
 
-    svg.selectAll('.genre-lab-text')
-        .on('mouseover', function(d, i){
-            d3.select(this)
-                .text(d)
-        })
-        .on('mouseout', function(d, i){
-            d3.select(this)
-                .text(d => (genre_categories[d]))
-        })
+    // svg.selectAll('.genre-lab-text')
+    //     .on('mouseover', function(d, i){
+    //         d3.select(this)
+    //             .text(d)
+    //     })
+    //     .on('mouseout', function(d, i){
+    //         d3.select(this)
+    //             .text(d => (genre_categories[d]))
+    //     })
 
     simulation  
         .force('charge', d3.forceManyBody().strength([2]))
@@ -585,20 +585,20 @@ function draw3(){
         .attr('x', d => gender_categoriesXY[d][0] + 120)
         
     svg.selectAll('.lab-text').transition().duration(300).delay((d, i) => i * 30)
-        .text(d => `Average: $${d3.format(",.2r")(gender_categoriesXY[d][2])}`)
+        .text(d => gender_categoriesXY[d][2])
         .attr('x', d => gender_categoriesXY[d][0] + 200)   
         .attr('y', d => gender_categoriesXY[d][1] + 50)
         .attr('opacity', 1)
 
-    svg.selectAll('.lab-text')
-        .on('mouseover', function(d, i){
-            d3.select(this)
-                .text(d)
-        })
-        .on('mouseout', function(d, i){
-            d3.select(this)
-                .text(d => `Average: $${d3.format(",.2r")(gender_categories[d][2])}`)
-        })
+    // svg.selectAll('.lab-text')
+    //     .on('mouseover', function(d, i){
+    //         d3.select(this)
+    //             .text(d)
+    //     })
+    //     .on('mouseout', function(d, i){
+    //         d3.select(this)
+    //             .text(d => (gender_categories[d][2]))
+    //     })
 
     simulation  
         .force('charge', d3.forceManyBody().strength([2]))
@@ -611,41 +611,61 @@ function draw3(){
 
 function draw1(){
     console.log('draw1')
-    
+    //drawInitial()
+    simulation.stop()
     let svg = d3.select('#vis').select('svg')
     clean('isMultiples')
 
-    simulation
-        .force('forceX', d3.forceX(d => gender_categoriesXY[d.Gender][0] + 200))
-        .force('forceY', d3.forceY(d => gender_categoriesXY[d.Gender][1] - 50))
-        .force('collide', d3.forceCollide(d => grossSizeScale(d.Gross) + 4))
+    // simulation
+    //     .force('forceX', d3.forceX(d => gender_categoriesXY[d.Gender][0] + 200))
+    //     .force('forceY', d3.forceY(d => gender_categoriesXY[d.Gender][1] - 50))
+    //     .force('collide', d3.forceCollide(d => grossSizeScale(d.Gross) + 4))
 
-    simulation.alpha(1).restart()
+    // simulation.alpha(1).restart()
+    simulation = d3.forceSimulation(dataset)
+
+     // Define each tick of simulation
+    simulation.on('tick', () => {
+        nodes
+            .attr('cx', d => d.x)
+            .attr('cy', d => d.y)
+    })
+
+    // Stop the simulation until later
+    simulation.stop()
    
-    svg.selectAll('.lab-text').transition().duration(300).delay((d, i) => i * 30)
-        .text(d => `% Female: ${(gender_categoriesXY[d][3])}%`)
-        .attr('x', d => gender_categoriesXY[d][0] + 200)   
-        .attr('y', d => gender_categoriesXY[d][1] + 50)
-        .attr('opacity', 1)
+    // svg.selectAll('.lab-text').transition().duration(300).delay((d, i) => i * 30)
+    //     .text(d => `% Female: ${(gender_categoriesXY[d][3])}%`)
+    //     .attr('x', d => gender_categoriesXY[d][0] + 200)   
+    //     .attr('y', d => gender_categoriesXY[d][1] + 50)
+    //     .attr('opacity', 1)
+    //     .attr('fill', d => categoryColorScale(d.Gender))
+    //     .attr('r', 10)
+    //     .attr('cx', (d, i) => i * 5.2 * Math.random())
+    //     .attr('cy', (d, i) => i * 5.2 * Math.random())
+    //     .attr('opacity', 0.8)
     
-    svg.selectAll('.lab-text')
-        .on('mouseover', function(d, i){
-            d3.select(this)
-                .text(d)
-        })
-        .on('mouseout', function(d, i){
-            d3.select(this)
-                .text(d => `% Female: ${(gender_categoriesXY[d][3])}%`)
-        })
+    // svg.selectAll('.lab-text')
+    //     .on('mouseover', function(d, i){
+    //         d3.select(this)
+    //             .text(d)
+    //     })
+    //     .on('mouseout', function(d, i){
+    //         d3.select(this)
+    //             .text(d => `% Female: ${(gender_categoriesXY[d][3])}%`)
+    //     })
    
-    svg.selectAll('.cat-rect').transition().duration(300).delay((d, i) => i * 30)
-        .attr('opacity', 0.2)
-        .attr('x', d => gender_categoriesXY[d][0] + 120)
+    // svg.selectAll('.cat-rect').transition().duration(300).delay((d, i) => i * 30)
+    //     .attr('opacity', 0.2)
+    //     .attr('x', d => gender_categoriesXY[d][0] + 120)
 
     svg.selectAll('circle')
         .transition().duration(400).delay((d, i) => i * 4)
             .attr('fill', d => categoryColorScale(d.Gender))
-            .attr('r', d => grossSizeScale(d.Gender))
+            .attr('r', 10)
+            .attr('cx', (d, i) => i * 5.2 * Math.random())
+            .attr('cy', (d, i) => i * 5.2 * Math.random())
+            .attr('opacity', 1)
 
 }
 
@@ -676,8 +696,8 @@ function draw5(){
 
 function draw6(){
     console.log('draw6')
+    simulation.stop()
     let svg = d3.select('#vis').select('svg')
-
 
     clean('isScatterZoom')
     svg.selectAll('.scatter-x').transition().attr('opacity', 0.0).selectAll('.domain').attr('opacity', 0)
