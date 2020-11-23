@@ -106,21 +106,21 @@ function createScales(){
    // histYScale = d3.scaleLinear(d3.extent(dataset, d => d.HistCol), [margin.top + height, margin.top])
 }
 
-function createLegend(x, y){
-    let svg = d3.select('#legend')
+// function createLegend(x, y){
+//     let svg = d3.select('#legend')
 
-    svg.append('g')
-        .attr('class', 'categoryLegend')
-        .attr('transform', `translate(${x},${y})`)
+//     svg.append('g')
+//         .attr('class', 'categoryLegend')
+//         .attr('transform', `translate(${x},${y})`)
 
-    categoryLegend = d3.legendColor()
-                            .shape('path', d3.symbol().type(d3.symbolCircle).size(150)())
-                            .shapePadding(10)
-                            .scale(genreColorScale)
+//     categoryLegend = d3.legendColor()
+//                             // .shape('path', d3.symbol().type(d3.symbolCircle).size(150)())
+//                             // .shapePadding(10)
+//                             // .scale(genreColorScale)
     
-    d3.select('.categoryLegend')
-        .call(categoryLegend)
-}
+//     d3.select('.categoryLegend')
+//         .call(categoryLegend)
+// }
 
 function createSizeLegend(){
     let svg = d3.select('#legend2')
@@ -133,7 +133,7 @@ function createSizeLegend(){
         .shape('circle')
         .shapePadding(15)
         .title('Box Office Scale')
-        .labelFormat(d3.format("$,.2r"))
+        .labelFormat(d3.format("($,.2r"))
         .cells(7)
 
     d3.select('.sizeLegend')
@@ -227,10 +227,10 @@ function drawInitial(){
             .html(`<strong>Title:</strong> ${d.Title} 
                 <br> <strong>Genre:</strong> ${d.Genre} 
                 <br> <strong>Majority Cast:</strong> ${d.Gender}
-                <br> <strong>Female %:</strong> ${d.Female}
-                <br> <strong>Male %:</strong> ${d.Male}
-                <br> <strong>Box Office : </strong> ${d.Gross}
-                <br> <strong>Budget: </strong> ${d.Budget}
+                <br> <strong>Female %:</strong> ${d3.format(".0%")(d.Female)}
+                <br> <strong>Male %:</strong> ${d3.format(".0%")(d.Male)}
+                <br> <strong>Box Office : </strong> ${d3.format("($,.2r")(d.Gross)}
+                <br> <strong>Budget: </strong> ${d3.format("($,.2r")(d.Budget)}
                 <br> <strong>Year Produced: </strong> ${d.Year}`)
     }
     
@@ -323,15 +323,15 @@ function drawInitial(){
         .attr('fill', 'black')
         .attr('text-anchor', 'middle')       
 
-    svg.selectAll('.lab-text')
-            .on('mouseover', function(d, i){
-                d3.select(this)
-                    .text(d)
-            })
-            .on('mouseout', function(d, i){
-                d3.select(this)
-                    .text(d => `Average: $${d3.format(",.2r")(gender_categoriesXY[d][2])}`)
-            })
+    // svg.selectAll('.lab-text')
+    //         .on('mouseover', function(d, i){
+    //             d3.select(this)
+    //                 .text(d)
+    //         })
+    //         .on('mouseout', function(d, i){
+    //             d3.select(this)
+    //                 .text(d => `Average: $${d3.format(",.2r")(gender_categoriesXY[d][2])}`)
+    //         })
 
 
     // Best fit line for gender scatter plot
@@ -534,6 +534,22 @@ function draw2(){
         .transition().duration(400).delay((d, i) => i * 5)
         .attr('r', 5)
         .attr('fill', d => categoryColorScale(d.Gender))
+    // List of groups (here I have one group per column)
+    var allYear = d3.map(dataset, function(d){return(d.Year)}).keys()
+
+    // // add the options to the button
+    d3.select("#selectButton")
+        .selectAll('allYear')
+        .data(allYear)
+        .enter()
+        .append('option')
+        .text(function (d) { return d; }) // text showed in the menu
+        .attr("value", function (d) { return d; }) // corresponding value returned by the button
+     // Listen to the slider?
+    d3.select("#selectButton").on("change", function(d){
+    selectedGroup = this.value
+    updateChart(selectedGroup)})
+
 
     svg.selectAll('.genre-rect').transition().duration(300).delay((d, i) => i * 30)
         .attr('opacity', 0.2)
@@ -567,7 +583,7 @@ function draw2(){
 
     //Reheat simulation and restart
     simulation.alpha(0.9).restart()
-    createLegend(20, 50)
+    //createLegend(20, 50)
 }
 
 function draw3(){

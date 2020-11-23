@@ -27,23 +27,30 @@
             <section class="step">
                 <div class="title"></div>
                 <br><br>
-                <h1>Visualizing Gender Representation in Malay Cinema in the 21st Century</h1>
+                <h1>Visualizing Gender Representation in Malaysian Cinema in the 21st Century</h1>
                 <p>By <a href = 'https://www.linkedin.com/in/naelahnordin/'>Naelah Nordin</a></p>
                 <p>
-                    Most people want a degree which will enable them to make a lot of money upon graduation. Here
-                are (almost) all the available degrees, sorted by the median salary received by students upon graduation. 
+                    I like watching movies and as I grew older, I find myself drawn to female-centric movies or movies with a 
+                majority female cast because I felt represented and they told stories that I related to. The more I learn about 
+                representation in media, the more I understand how important it is in cultivating the social culture and 
+                influencing how stereotypes are enforced. It also made me wonder of where does Malaysia stand in terms of 
+                gender representation and how has the Malaysian film scene progressed in the past 20 years? <br><br>
+                    
+                In this project, female-majority movies are represented by yellow bubbles and is defined by the female-to-male ratio of the first seven cast
+                credited being more than 50%, and vice-versa for male-majority movies, they are represented by red bubbles and defined by the male-to-female ratio
+                of the first seven cast credited being 50% and more. <br><br>
 
-                This graph gives us the ranking of each university major, based on the median salary of graduates. It gives us a rough
-                sense of which majors have the highest pay, but it's somewhat hard to read. Let's take a more detailed
-                journey through this data. Scroll down when you are ready! <br><br>
+                If you ever want to find out more about a movie, just hover over it and a tooltip should appear.<br><br>
 
-                If you ever want to find out more about a bubble, just hover over it and a tooltip should appear.<br><br>
-
-                (Data was provided by FiveThirtyEight, and originally sourced from the American Community Survey 2010-2012 Public Use Microdata Series)
-                </p>
+                (Data was taken from FINAS & Wikipedia)</p>
             </section>
             <section class="step">
+                <h2>Are some genres more dominated by one gender or the other?</h2>
                 <p>
+                In this section, movies are clustered based on their genre. There are 16 genres altogether.
+                We can see that female-majority movies do not dominate any particular genre. However, they are 
+                more prominent in Romance, Comedy, Romantic Comedy, Drama and Thriller. Other genres are dominated
+                by male-majority movies but have a significantly lower number of movies in comparison.
                 Here, we have clustered the majors based on the broader category, of which there are 16 in total. The size 
                 of the bubbles represent the median salary of graduates from the major. 
 
@@ -53,49 +60,63 @@
                 <svg id = 'legend' width = '400px' height = '500px'></svg>
             </section>
             <section class = 'step'>
+                <h2>Which gender performs better in the box office?</h2>
                 <svg id = 'legend2' width = '400px' height = '450px'></svg><br><br>
-                Bear in mind that some of these figures may suffer from small sample sizes. If you hover over a bubble, you can see additional information,
-                including the number of students enrolled in a given major. Salary figures from degrees with lower 
-                enrolment may be less accurate due to the smaller pool of student respondents
+                <p>
+                Box office sales is a significant indicator of the success of a movie. The size of the bubble represents the scale of its number as noted above.
+                The amount has been adjusted to inflation based on Malaysia's annual Consumer Price Index (CPI). <br><br>
+                We can see that male-majorit movies giants over female-majority movies. Not only that, they also get more box office sales.
+            </p>
             </section>
             <section class="step">
                 <br><br><br><br><br><br>
+                <h2>How is the distribution of female-majority movies throughout the years?</h2>
                 <p>
-                    If we rearrange all the data points into a histogram format, the salary potential of engineering majors becomes
-                even more stark, as almost all the points on the right of the graph are colored yellow, for engineering. As for all the 
-                other majors, they follow a fairly diverse yet tightly spaced distribution, with the modal class being
-                salaries between $34,000 and $36,000.
+                    If we rearrange all the data points based on the year they were released, we can see a significant increase in movies produced starting 2010. However, the number of
+                    female-majority movies seem to be stagnant throughout despite the increase in movies produced. <br><br>
+                    The movies are also sorted by date of release from bottom-to-top, so we can see a pattern of high-grossing movies being released by the end of the year.
                 </p>
                 
             </section>
             <section class="step">
                 
                 <p>
-                <h2>Does Gender Influence Chosen Majors?</h2>
-                Now what if we took those same categories, but coloured them based on the proportion of the students which are male or female? 
-                In this chart, blue represents majors with > 60% male, and red represents > 60% female, and the grey bubbles represent the more gender 
-                balanced courses.
-                <br><br>(Hover over the labels if you've forgotten the category)<br><br>
+                <h2>Do female-majority movies perform better in box-office sales given a bigger budget?</h2>
+                This scatterplot of budget against box office sales explores the correlation between the two and can give an idea 
+                of how female-majority is accepted by the masses (box office sales) in relation to the support given (budget)<br><br>
+                A line of best fit is calculated and plotted to show the trend in both genders. An interesting pattern emerges 
+                where we see that while male-majority performs higher given a smaller budget, the trend shows that female-majority movies have a steeper trend thus performing better given more budget.
+                <br><br>
+                <small>Note: Some movies do not have record of their budget as FINAS did not release the budget of movies for certain years</small><br><br>
 
-                What is striking about this graphic is that almost every category grouping of majors are either decidedly more female-weighted or male-weighted,
-                with the exception of perhaps the business and physical sciences majors.  
                 </p>
                  
             </section>
             <section class="step">
-                When we plot the % of students in a major being female against the median salary of students in the major, a fairly clear trend emerges. 
-                It appears that majors with a higher proportion of male students also produce students with higher median wages. <br><br> In fact, a linear model
-                would predict that for every added percentage of female students in a given major, the median annual salary drops by $306 USD.
+                
+                Zooming into a smaller range of budget and box office sales, we can see that female-majority movies are closer to their trend line compared to male-majority movies
+                that is more scattered thus has a lower trend line<br><br> Female-majority movies also generally do not start on a high budget but those that do performs better
+                than male-majority movies. This implies that female-majority movies have a higher chance of performing well in the box office if given a higher budget.
             </section>
             <section class="step">
-                So we've seen the most 'profitable' majors, as well as the ones with the most uneven gender distributions. But what are students 
-                actually enrolling in the most frequently? What can enrolment numbers tell us about actual interest in each major? This chart has the bubbles 
-                sized based on the number of students enrolled in each major, and coloured by category. 
-                <svg id = 'legend3' width = '400px' height = '350px'></svg>
-                Psychology is the clear leader in this regard, with over 390,000 students enrolled. Business related topics such as general business, business management,
-                accounting and finance are all also heavily enrolled.
+                <h1>The End</h1>
+                <p>
+                In conclusion, I conclude that male-majority movies dominate the Malaysian film scene but do not necessarily perform better than female-majority movies in correlation with the budget
+                received. I hope to see more quality movies produced in Malaysia with a more diverse set of genres beyond rempit and horror as those are notably well-received. I hope the fil industry
+                gives more opportunities for movies with female narratives and a female-majority cast for better gender representation. 
+                <h2>Recommended Future Work</h2>
+                Analyzing the gender distribution in the cast is just the tip of the iceberg. There are more accurate ways to determine gender representation in movies which includes 
+                analyzing the script and determining the amout of screentime the female characters receive, or analyze the number of lines that they say in comparison to their male counterparts. 
+                A step further than that is to analyze the subject of their lines and determine if the movie passes the bechdel test which is a common rubric in measuring female inclusivity in a movie.
+                <br><br>
+                Apart from gender representation, racial and ethnic representation in Malaysian movies is also an interesting subject to explore and analyze how far we have progressed in including 
+                racial representation considering we are a multi-racial country.
+                <br><br><br>
+                
+            </p>
+                <span></span><span></span><span></span>
             </section>
-            <section class="step">
+            <!-- <section class="step">
                 <h1>The End</h1>
                 <p>
                     Hopefully, this has helped you in deciding what major you hope to study. If you want to take a deeper look into the data for yourself, you can download
@@ -107,7 +128,7 @@
                     I've also produced a full write-up of how I made this <a href = 'https://towardsdatascience.com/how-i-created-an-interactive-scrolling-visualisation-with-d3-js-and-how-you-can-too-e116372e2c73'>over at my blog</a>.
                 </p>
                 <span></span><span></span><span></span>                
-            </section>
+            </section> -->
            
 
         </div>
