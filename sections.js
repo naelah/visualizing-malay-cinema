@@ -42,9 +42,10 @@ const categoriesXY = {'Engineering': [0, 400, 57382, 23.9],
                         'Psychology & Social Work': [600, 600, 30100, 79.4],
                         'Communications & Journalism': [600, 800, 34500, 65.9],
                         'Interdisciplinary': [600, 200, 35000, 77.1]}
+const years = [2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019, "all"]
 
 const margin = {left: 170, top: 50, bottom: 50, right: 20}
-const width = 1000 - margin.left - margin.right
+const width = 800 - margin.left - margin.right
 const height = 950 - margin.top - margin.bottom
 
 //Read Data, convert numerical categories into floats
@@ -64,16 +65,6 @@ d3.csv('data/processed_df_Nov17.csv', function(d){
         Female: +d.female_dist7,
         Gender: d.gender_majority,
         YearCol: +d.year_col
-        // Major: d.Major,
-        // Total: +d.Total,
-        // Men: +d.Men,
-        // Women: +d.Women,
-        // Median: +d.Median,
-        // Unemployment: +d.Unemployment_rate,
-        // Category: d.Major_category,
-        // ShareWomen: +d.ShareWomen, 
-        // HistCol: +d.Histogram_column,
-        // Midpoint: +d.midpoint
     };
 }).then(data => {
     dataset = data
@@ -106,21 +97,21 @@ function createScales(){
    // histYScale = d3.scaleLinear(d3.extent(dataset, d => d.HistCol), [margin.top + height, margin.top])
 }
 
-function createLegend(x, y){
-    let svg = d3.select('#legend')
+// function createLegend(x, y){
+//     let svg = d3.select('#legend')
 
-    svg.append('g')
-        .attr('class', 'categoryLegend')
-        .attr('transform', `translate(${x},${y})`)
+//     svg.append('g')
+//         .attr('class', 'categoryLegend')
+//         .attr('transform', `translate(${x},${y})`)
 
-    categoryLegend = d3.legendColor()
-                            .shape('path', d3.symbol().type(d3.symbolCircle).size(150)())
-                            .shapePadding(10)
-                            .scale(genreColorScale)
+//     categoryLegend = d3.legendColor()
+//                             // .shape('path', d3.symbol().type(d3.symbolCircle).size(150)())
+//                             // .shapePadding(10)
+//                             // .scale(genreColorScale)
     
-    d3.select('.categoryLegend')
-        .call(categoryLegend)
-}
+//     d3.select('.categoryLegend')
+//         .call(categoryLegend)
+// }
 
 function createSizeLegend(){
     let svg = d3.select('#legend2')
@@ -133,7 +124,7 @@ function createSizeLegend(){
         .shape('circle')
         .shapePadding(15)
         .title('Box Office Scale')
-        .labelFormat(d3.format("$,.2r"))
+        .labelFormat(d3.format("($,.2r"))
         .cells(7)
 
     d3.select('.sizeLegend')
@@ -167,13 +158,15 @@ function createSizeLegend2(){
 
 function drawInitial(){
     console.log('drawInitial')
+    //resetData()
     createSizeLegend()
     createSizeLegend2()
 
     let svg = d3.select("#vis")
                     .append('svg')
-                    .attr('width', 1000)
-                    .attr('height', 950)
+                    .attr("viewBox", `0 0 950 1000`)
+                    .attr('preserveAspectRatio', 'none')
+                    .attr('style', 'overflow: visible')
                     .attr('opacity', 1)
 
 
@@ -227,10 +220,10 @@ function drawInitial(){
             .html(`<strong>Title:</strong> ${d.Title} 
                 <br> <strong>Genre:</strong> ${d.Genre} 
                 <br> <strong>Majority Cast:</strong> ${d.Gender}
-                <br> <strong>Female %:</strong> ${d.Female}
-                <br> <strong>Male %:</strong> ${d.Male}
-                <br> <strong>Box Office : </strong> ${d.Gross}
-                <br> <strong>Budget: </strong> ${d.Budget}
+                <br> <strong>Female %:</strong> ${d3.format(".0%")(d.Female)}
+                <br> <strong>Male %:</strong> ${d3.format(".0%")(d.Male)}
+                <br> <strong>Box Office : </strong> ${d3.format("($,.2r")(d.Gross)}
+                <br> <strong>Budget: </strong> ${d3.format("($,.2r")(d.Budget)}
                 <br> <strong>Year Produced: </strong> ${d.Year}`)
     }
     
@@ -264,7 +257,7 @@ function drawInitial(){
         .append('rect')
             .attr('class', 'cat-rect')
             .attr('x', d => gender_categoriesXY[d][0] + 120 + 1000)
-            .attr('y', d => gender_categoriesXY[d][1] + 30)
+            .attr('y', d => gender_categoriesXY[d][1] + 250)
             .attr('width', 160)
             .attr('height', 30)
             .attr('opacity', 0)
@@ -323,18 +316,7 @@ function drawInitial(){
         .attr('fill', 'black')
         .attr('text-anchor', 'middle')       
 
-    svg.selectAll('.lab-text')
-            .on('mouseover', function(d, i){
-                d3.select(this)
-                    .text(d)
-            })
-            .on('mouseout', function(d, i){
-                d3.select(this)
-                    .text(d => `Average: $${d3.format(",.2r")(gender_categoriesXY[d][2])}`)
-            })
-
-
-    // Best fit line for gender scatter plot
+    
 
     const bestFitLineFemale = [{x: 0, y: 360517}, {x: 42000000, y: 42350647.0}]
     const bestFitLineMale = [{x: 0, y: 2607780}, {x: 42000000, y: 26206908}]
@@ -443,7 +425,85 @@ function drawInitial(){
         .attr('transform', 'translate(0, 700)')
         .attr('opacity', 0)
         .call(barxAxis)
+    // Initialize the button
+    let dropdownButton = d3.select("#selectYear2")
+                            .append('select')
+
+    // add the options to the button
+    dropdownButton // Add a button
+        .selectAll('myOptions') // Next 4 lines add 6 options = 6 colors
+        .data(years)
+        .enter()
+        .append('option')
+        .text(function (d) { return d; }) // text showed in the menu
+        .attr("value", function (d) { return d; }) // corresponding value returned by the button
+
 }
+function resetData() {
+    console.log('resetData')
+    let svg = d3.select("#vis").select('svg')
+    var circles = svg.selectAll('circle')
+
+    circles.transition()
+        .attr("r", 10)
+        .attr("opacity", 1)
+
+  }
+
+function updateChart2(selectedYear) {
+    resetData()
+
+    console.log('updatechart2 = '+selectedYear)
+    let svg = d3.select("#vis").select('svg')
+    var circles = svg.selectAll('circle')
+
+    circles.transition()
+        .attr("r", function(d){ if(d.Year == selectedYear){return 12} else {return 0}})
+        .attr("opacity", function(d){ if(d.Year == selectedYear){return 1} else {return 0}})
+    simulation
+        .alpha(0.7).alphaDecay(0.02).restart()
+  }
+
+  function updateChart3(selectedYear) {
+    resetData()
+
+    console.log('updatechart3 = '+selectedYear)
+    let svg = d3.select("#vis").select('svg')
+    var circles = svg.selectAll('circle')
+
+    circles.transition()
+        .attr("r", function(d){ if(d.Year == selectedYear){return 12} else {return 0}})
+        .attr("opacity", function(d){ if(d.Year == selectedYear){return 1} else {return 0}})
+    simulation
+        .alpha(0.7).alphaDecay(0.02).restart()
+  }
+
+  function updateChart6(selectedGender) {
+    resetData()
+
+    console.log('updatechart6 = '+selectedGender)
+    let svg = d3.select("#vis").select('svg')
+    var circles = svg.selectAll('circle')
+
+    circles.transition()
+        .attr("opacity", function(d){ if(d.Gender == selectedGender){return 1} else {return 0}})
+    svg.select('.z-best-fit-female').transition().duration(200).attr('opacity', function(d){if('Female' == selectedGender){return 1} else {return 0}})
+    svg.select('.z-best-fit-male').transition().duration(200).attr('opacity', function(d){if('Male' == selectedGender){return 1} else {return 0}})
+  }
+
+  function updateChart5(selectedGender) {
+    resetData()
+
+    console.log('updatechart6 = '+selectedGender)
+    let svg = d3.select("#vis").select('svg')
+    var circles = svg.selectAll('circle')
+
+    circles.transition()
+        .attr("opacity", function(d){ if(d.Gender == selectedGender){return 1} else {return 0}})
+    svg.select('.best-fit-female').transition().duration(200).attr('opacity', function(d){if('Female' == selectedGender){return 1} else {return 0}})
+    svg.select('.best-fit-male').transition().duration(200).attr('opacity', function(d){if('Male' == selectedGender){return 1} else {return 0}})
+  }
+
 
 //Cleaning Function
 //Will hide all the elements which are not necessary for a given chart type 
@@ -495,6 +555,7 @@ function clean(chartType){
 
 function draw8(){
     console.log('draw8')
+    resetData()
     //Stop simulation
     simulation.stop()
     
@@ -526,6 +587,7 @@ function draw8(){
 
 function draw2(){
     console.log('draw2')
+    resetData()
     let svg = d3.select("#vis").select('svg')
 
     clean('isMultiplesGenre')
@@ -534,6 +596,25 @@ function draw2(){
         .transition().duration(400).delay((d, i) => i * 5)
         .attr('r', 5)
         .attr('fill', d => categoryColorScale(d.Gender))
+
+    // List of year
+    var allYear = d3.map(dataset, function(d){return(d.Year)}).keys()
+
+    // // add the options to the button
+    d3.select("#selectYear2")
+        .selectAll('allYear')
+        .data(allYear)
+        .enter()
+        .append('option')
+        .text(function (d) { return d; }) // text showed in the menu
+        .attr("value", function (d) { return d; }) // corresponding value returned by the button
+
+        
+     // Listen to the slider?
+    d3.select("#selectYear2").on("change", function(d){
+    selectedYear = this.value
+    updateChart2(selectedYear)})
+
 
     svg.selectAll('.genre-rect').transition().duration(300).delay((d, i) => i * 30)
         .attr('opacity', 0.2)
@@ -567,13 +648,34 @@ function draw2(){
 
     //Reheat simulation and restart
     simulation.alpha(0.9).restart()
-    createLegend(20, 50)
+    //createLegend(20, 50)
+
 }
 
 function draw3(){
     console.log('draw3')
+    resetData()
     let svg = d3.select("#vis").select('svg')
     clean('isMultiples')
+
+       // List of year
+       var allYear = d3.map(dataset, function(d){return(d.Year)}).keys()
+
+       // // add the options to the button
+       d3.select("#selectYear3")
+           .selectAll('allYear')
+           .data(allYear)
+           .enter()
+           .append('option')
+           .text(function (d) { return d; }) // text showed in the menu
+           .attr("value", function (d) { return d; }) // corresponding value returned by the button
+   
+           
+        // Listen to the slider?
+       d3.select("#selectYear3").on("change", function(d){
+       selectedYear = this.value
+       updateChart3(selectedYear)})
+   
     
     svg.selectAll('circle')
         .transition().duration(400).delay((d, i) => i * 5)
@@ -587,18 +689,9 @@ function draw3(){
     svg.selectAll('.lab-text').transition().duration(300).delay((d, i) => i * 30)
         .text(d => gender_categoriesXY[d][2])
         .attr('x', d => gender_categoriesXY[d][0] + 200)   
-        .attr('y', d => gender_categoriesXY[d][1] + 50)
+        .attr('y', d => gender_categoriesXY[d][1] + 270)
         .attr('opacity', 1)
 
-    // svg.selectAll('.lab-text')
-    //     .on('mouseover', function(d, i){
-    //         d3.select(this)
-    //             .text(d)
-    //     })
-    //     .on('mouseout', function(d, i){
-    //         d3.select(this)
-    //             .text(d => (gender_categories[d][2]))
-    //     })
 
     simulation  
         .force('charge', d3.forceManyBody().strength([2]))
@@ -611,15 +704,12 @@ function draw3(){
 
 function draw1(){
     console.log('draw1')
+ 
     //drawInitial()
-    simulation.stop()
+    simulation.stop()   
+    resetData()
     let svg = d3.select('#vis').select('svg')
     clean('isMultiples')
-
-    // simulation
-    //     .force('forceX', d3.forceX(d => gender_categoriesXY[d.Gender][0] + 200))
-    //     .force('forceY', d3.forceY(d => gender_categoriesXY[d.Gender][1] - 50))
-    //     .force('collide', d3.forceCollide(d => grossSizeScale(d.Gross) + 4))
 
     // simulation.alpha(1).restart()
     simulation = d3.forceSimulation(dataset)
@@ -633,31 +723,7 @@ function draw1(){
 
     // Stop the simulation until later
     simulation.stop()
-   
-    // svg.selectAll('.lab-text').transition().duration(300).delay((d, i) => i * 30)
-    //     .text(d => `% Female: ${(gender_categoriesXY[d][3])}%`)
-    //     .attr('x', d => gender_categoriesXY[d][0] + 200)   
-    //     .attr('y', d => gender_categoriesXY[d][1] + 50)
-    //     .attr('opacity', 1)
-    //     .attr('fill', d => categoryColorScale(d.Gender))
-    //     .attr('r', 10)
-    //     .attr('cx', (d, i) => i * 5.2 * Math.random())
-    //     .attr('cy', (d, i) => i * 5.2 * Math.random())
-    //     .attr('opacity', 0.8)
-    
-    // svg.selectAll('.lab-text')
-    //     .on('mouseover', function(d, i){
-    //         d3.select(this)
-    //             .text(d)
-    //     })
-    //     .on('mouseout', function(d, i){
-    //         d3.select(this)
-    //             .text(d => `% Female: ${(gender_categoriesXY[d][3])}%`)
-    //     })
-   
-    // svg.selectAll('.cat-rect').transition().duration(300).delay((d, i) => i * 30)
-    //     .attr('opacity', 0.2)
-    //     .attr('x', d => gender_categoriesXY[d][0] + 120)
+
 
     svg.selectAll('circle')
         .transition().duration(400).delay((d, i) => i * 4)
@@ -672,9 +738,19 @@ function draw1(){
 function draw5(){
     console.log('draw5')
     simulation.stop()
-    
+    resetData()
     let svg = d3.select("#vis").select("svg")
     clean('isScatterFull')
+
+    // // add the options to the button
+    d3.select("#selectGender5")
+    .attr("value", function (d) { return d; }) // corresponding value returned by the button
+
+    
+    // Listen to the slider?
+    d3.select("#selectGender5").on("change", function(d){
+        selectedGender = this.value
+        updateChart5(selectedGender)})
 
     svg.selectAll('.scatter-x').transition().attr('opacity', 0.7).selectAll('.domain').attr('opacity', 1)
     svg.selectAll('.scatter-y').transition().attr('opacity', 0.7).selectAll('.domain').attr('opacity', 1)
@@ -686,7 +762,7 @@ function draw5(){
     
     svg.selectAll('circle').transition(1600)
         .attr('fill', d => categoryColorScale(d.Gender))
-        .attr('r', 10)
+        .attr('r', 6)
 
     svg.select('.best-fit-male').transition().duration(300)
         .attr('opacity', 0.5)
@@ -695,9 +771,21 @@ function draw5(){
 }
 
 function draw6(){
+    
     console.log('draw6')
     simulation.stop()
+    resetData()
     let svg = d3.select('#vis').select('svg')
+
+    // // add the options to the button
+    d3.select("#selectGender6")
+    .attr("value", function (d) { return d; }) // corresponding value returned by the button
+
+    
+    // Listen to the slider?
+    d3.select("#selectGender6").on("change", function(d){
+        selectedGender = this.value
+        updateChart6(selectedGender)})
 
     clean('isScatterZoom')
     svg.selectAll('.scatter-x').transition().attr('opacity', 0.0).selectAll('.domain').attr('opacity', 0)
@@ -712,7 +800,7 @@ function draw6(){
     
     svg.selectAll('circle').transition(1600)
         .attr('fill', d => categoryColorScale(d.Gender))
-        .attr('r', 10)
+        .attr('r', 6)
 
     svg.select('.z-best-fit-female').transition().duration(300)
         .attr('opacity', 0.5)
@@ -723,6 +811,7 @@ function draw6(){
 
 function draw4(){
     console.log('draw4')
+    resetData()
     let svg = d3.select('#vis').select('svg')
 
     clean('isHist')
@@ -748,6 +837,7 @@ function draw4(){
 
 function draw7(){
     console.log('draw7')
+    resetData()
     clean('none')
 
     let svg = d3.select('#vis').select('svg')

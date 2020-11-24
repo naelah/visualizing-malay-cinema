@@ -7527,7 +7527,7 @@ defaultLocale({
   decimal: ".",
   thousands: ",",
   grouping: [3],
-  currency: ["MYR", "MYR"],
+  currency: ["MYR ", ""],
   minus: "-"
 });
 
