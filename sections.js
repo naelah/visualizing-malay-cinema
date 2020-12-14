@@ -376,6 +376,13 @@ function drawInitial(){
         .attr('transform', `translate(0, ${height + margin.top})`)
         .call(g => g.select('.domain')
             .remove())
+
+    svg.append("text")  
+        .attr('class', 'scatter-x-label')          
+        .attr("transform",`translate(0, ${height + margin.top})`)
+        .attr('opacity', 0)
+        .style("text-anchor", "middle")
+        .text("Budget(MYR)");
     
     svg.append('g')
         .call(scatteryAxis)
@@ -388,6 +395,16 @@ function drawInitial(){
             .attr('stroke-opacity', 0.2)
             .attr('stroke-dasharray', 2.5)
 
+    svg.append("text")
+        .attr('class', 'scatter-y-label')          
+        .attr("transform", "rotate(-90)")
+        .attr("y", `translate(${margin.left - 20 + width}, 0)`)
+        .attr("x",0 - (height / 2))
+        .attr("dy", "1em")
+        .attr('opacity', 0)
+        .style("text-anchor", "middle")
+        .text("Box Office Sales (MYR)"); 
+
     svg.append('g')
         .call(zscatterxAxis)
         .attr('class', 'z-scatter-x')
@@ -395,6 +412,12 @@ function drawInitial(){
         .attr('transform', `translate(0, ${height + margin.top})`)
         .call(g => g.select('.domain')
             .remove())
+    svg.append("text")  
+        .attr('class', 'z-scatter-x-label')           
+        .attr("transform",`translate(0, ${height + margin.top})`)
+        .attr('opacity', 0)
+        .style("text-anchor", "middle")
+        .text("Budget(MYR)");
         
     svg.append('g')
         .call(zscatteryAxis)
@@ -406,6 +429,15 @@ function drawInitial(){
         .call(g => g.selectAll('.tick line'))
             .attr('stroke-opacity', 0.2)
             .attr('stroke-dasharray', 2.5)
+    svg.append("text")
+        .attr('class', 'z-scatter-y-label')     
+        .attr("transform", "rotate(-90)")
+        .attr("y", `translate(${margin.left - 20 + width}, 0)`)
+        .attr("x",0 - (height / 2))
+        .attr("dy", "1em")
+        .attr('opacity', 0)
+        .style("text-anchor", "middle")
+        .text("Box Office Sales (MYR)"); 
 
     // Axes for Histogram 
 
@@ -517,6 +549,10 @@ function clean(chartType){
         svg.selectAll('.z-scatter-y').transition().attr('opacity', 0)
         svg.select('.best-fit-female').transition().duration(200).attr('opacity', 0)
         svg.select('.best-fit-male').transition().duration(200).attr('opacity', 0)
+        svg.selectAll('.z-scatter-x-label').transition().attr('opacity', 0)
+        svg.selectAll('.z-scatter-y-label').transition().attr('opacity', 0)
+        svg.selectAll('.scatter-x-label').transition().attr('opacity', 0)
+        svg.selectAll('.scatter-y-label').transition().attr('opacity', 0)
     }
     if (chartType !== "isScatterZoom")
         svg.selectAll('.scatter-x').transition().attr('opacity', 0)
@@ -525,6 +561,11 @@ function clean(chartType){
         svg.selectAll('.z-scatter-y').transition().attr('opacity', 0)
         svg.select('.z-best-fit-female').transition().duration(200).attr('opacity', 0)
         svg.select('.z-best-fit-male').transition().duration(200).attr('opacity', 0)
+        svg.selectAll('.z-scatter-x-label').transition().attr('opacity', 0)
+        svg.selectAll('.z-scatter-y-label').transition().attr('opacity', 0)
+        svg.selectAll('.scatter-x-label').transition().attr('opacity', 0)
+        svg.selectAll('.scatter-y-label').transition().attr('opacity', 0)
+        
 
     if (chartType !== "isMultiples"){
         svg.selectAll('.lab-text').transition().attr('opacity', 0)
@@ -598,15 +639,10 @@ function draw2(){
         .attr('fill', d => categoryColorScale(d.Gender))
 
     // List of year
-    var allYear = d3.map(dataset, function(d){return(d.Year)}).keys()
+    var allYear = [2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019]
 
     // // add the options to the button
     d3.select("#selectYear2")
-        .selectAll('allYear')
-        .data(allYear)
-        .enter()
-        .append('option')
-        .text(function (d) { return d; }) // text showed in the menu
         .attr("value", function (d) { return d; }) // corresponding value returned by the button
 
         
@@ -659,16 +695,12 @@ function draw3(){
     clean('isMultiples')
 
        // List of year
-       var allYear = d3.map(dataset, function(d){return(d.Year)}).keys()
+       //var allYear = d3.map(dataset, function(d){return(d.Year)}).keys()
+       var allYear = [2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020]
 
        // // add the options to the button
        d3.select("#selectYear3")
-           .selectAll('allYear')
-           .data(allYear)
-           .enter()
-           .append('option')
-           .text(function (d) { return d; }) // text showed in the menu
-           .attr("value", function (d) { return d; }) // corresponding value returned by the button
+            .attr("value", function (d) { return d; }) // corresponding value returned by the button
    
            
         // Listen to the slider?
@@ -754,6 +786,8 @@ function draw5(){
 
     svg.selectAll('.scatter-x').transition().attr('opacity', 0.7).selectAll('.domain').attr('opacity', 1)
     svg.selectAll('.scatter-y').transition().attr('opacity', 0.7).selectAll('.domain').attr('opacity', 1)
+    svg.selectAll('.scatter-x-label').transition().attr('opacity', 0.7).selectAll('.domain').attr('opacity', 1)
+    svg.selectAll('.scatter-y-label').transition().attr('opacity', 0.7).selectAll('.domain').attr('opacity', 1)
 
     svg.selectAll('circle')
         .transition().duration(800).ease(d3.easeBack)
@@ -792,6 +826,10 @@ function draw6(){
     svg.selectAll('.scatter-y').transition().attr('opacity', 0.0).selectAll('.domain').attr('opacity', 0)
     svg.selectAll('.z-scatter-x').transition().attr('opacity', 0.7).selectAll('.domain').attr('opacity', 1)
     svg.selectAll('.z-scatter-y').transition().attr('opacity', 0.7).selectAll('.domain').attr('opacity', 1)
+    svg.selectAll('.scatter-x-label').transition().attr('opacity', 0.0).selectAll('.domain').attr('opacity', 0)
+    svg.selectAll('.scatter-y-label').transition().attr('opacity', 0.0).selectAll('.domain').attr('opacity', 0)
+    svg.selectAll('.z-scatter-x-label').transition().attr('opacity', 0.7).selectAll('.domain').attr('opacity', 1)
+    svg.selectAll('.z-scatter-y-label').transition().attr('opacity', 0.7).selectAll('.domain').attr('opacity', 1)
 
     svg.selectAll('circle')
         .transition().duration(800).ease(d3.easeBack)
@@ -833,14 +871,17 @@ function draw4(){
 
     svg.selectAll('.lab-text')
         .on('mouseout', )
+    
 }
 
 function draw7(){
     console.log('draw7')
     resetData()
     clean('none')
-
+    
     let svg = d3.select('#vis').select('svg')
+    simulation.stop()
+
     svg.selectAll('circle')
         .transition()
         .attr('r', d => grossSizeScale(d.Gross) * 1.6)
